@@ -17,7 +17,7 @@ namespace Employees_App.Controllers
             _employeeService = employeeService;
         }
         [HttpGet]
-        public async Task<ActionResult<GeneralResponse>> GetAll()
+        public async Task<ActionResult<GeneralResponse>> GetAllEmployees()
         {
             try
             {
@@ -25,6 +25,21 @@ namespace Employees_App.Controllers
             return Ok(ResponseBuilder.BuildSuccessResponse(employees));
 
             }catch(Exception ex)
+            {
+                return BadRequest(ResponseBuilder.BuildErrorResponse(ex.Message));
+
+            }
+        }
+        [HttpGet]
+        public async Task<ActionResult<GeneralResponse>> GetEmployeeById(int id)
+        {
+            try
+            {
+                var employees = await _employeeService.GetByIdAsync(id);
+                return Ok(ResponseBuilder.BuildSuccessResponse(employees));
+
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ResponseBuilder.BuildErrorResponse(ex.Message));
 

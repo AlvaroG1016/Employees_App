@@ -25,6 +25,9 @@ namespace Employees_App.Services
         public async Task<EmployeeWithAnnualSalaryDto> GetByIdAsync(int id)
         {
             var employee = await _apiClient.GetEmployeeByIdAsync(id);
+            if (employee == null)
+                throw new KeyNotFoundException($"Employee with id {id} not found.");
+
             return _mapper.Map<EmployeeWithAnnualSalaryDto>(employee);
         }
     }
