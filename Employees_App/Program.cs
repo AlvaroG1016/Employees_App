@@ -13,6 +13,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+var EmployeeSpecificOrigins = "_employeeAppSpecificOrigins";
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: EmployeeSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:4200")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                      });
+});
+
 builder.Services.AddHttpClient<IEmployeeApiClient, EmployeeApiClient>(client =>
 {
     client.BaseAddress = new Uri(ProjectConstants.ApiConstants.BaseUrl);
@@ -33,6 +48,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors(EmployeeSpecificOrigins);
 
 app.MapControllers();
 
